@@ -1,23 +1,51 @@
-// 导入koa，和koa 1.x不同，在koa2中，我们导入的是一个class，因此用大写的Koa表示:
 const Koa = require('koa');
+const Router = require('koa-router')
+const bodyParser = require('koa-bodyparser')
 
-// 创建一个Koa对象表示web app本身:
 const app = new Koa();
+const router = new Router();
 
+// 中间件
 app.use(async (ctx, next)=>{
-    const start = new Date().getTime()
+    console.log(ctx.request.url)
     await next()
-    const end = new Date().getTime()
-    console.log(end - start)
+
+    // 错误处理
+    if(ctx.status === 404){
+        ctx.body = '这是一个404页面'
+    }
 })
 
-// 对于任何请求，app将调用该异步函数处理请求：
-app.use(async (ctx, next) => {
-    await next();
-    ctx.response.type = 'text/html';
-    ctx.response.body = '<h1>Hello, koa2!</h1>';
+app.use(bodyParser());
+
+router.get('/hello/:name', async (ctx, next)=>{
+    let name = ctx.params.name
+    ctx.response.body = `<h1>hello, ${name}</h1>`
+})
+
+// 创建一个表单
+router.get('/', async (ctx, next) => {
+    ctx.response.body = `<h1>1111</h1>
+        <form action="/signin" method="post">
+            <p>Name: <input name="name" value="koa"></p>
+            <p>Password: <input name="password" type="password"></p>
+            <p><input type="submit" value="Submit"></p>
+        </form>`;
 });
 
+router.post('/signin', async(ctx, next) => {
+    let name = ctx.request.body.name || ''
+    let password = ctx.request.body.password
+    console.log(name, password)
+    if(name === 'koa' && password === '123'){
+        ctx.response.body = `<h1>Hello, ${name}</h1>`
+    } else {
+        ctx.response.body = `<h1>try again</h1>`
+    }
+})
+
+//add router middleware
+app.use(router.routes());
 
 // 在端口3000监听:
 app.listen(3000);
