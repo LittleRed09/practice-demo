@@ -5,24 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .green {
+        line-height: 1.1;
+        border: solid limegreen;
+        }
+
+        .red {
+        line-height: 1.1em;
+        border: solid red;
+        }
+        .blue {
+        line-height: 110%;
+        border: solid blue;
+        }
+
+        h1 {
+        font-size: 30px;
+        }
+
+        .box {
+        width: 18em;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 15px;
+        }
+    </style>
     <script>
-        var length = 10;
-function fn() {
-    console.log(this)
-    return this.length+1;
-}
-var obj = {
-    length: 5,
-    test1: function() {
-        return fn();
-    }
-};
-obj.test2=fn;
-//下面代码输出是什么，说一下为什么
-console.log(obj.test1())//11
+        var a = 1;
+        var b = {
+            log: function(){
+                console.log(a)
+                console.log(this.a)
+            }
+        }
+        b.log();
     </script>
 </head>
 <body>
-    
+    <div class="box green">
+        <h1>Avoid unexpected results by using unitless line-height.</h1>
+         length and percentage line-heights have poor inheritance behavior ...
+       </div>
+       
+       <div class="box red">
+        <h1>Avoid unexpected results by using unitless line-height.</h1>
+         length and percentage line-heights have poor inheritance behavior ...
+       </div>
+
+       <div class="box blue">
+        <h1>Avoid unexpected results by using unitless line-height.</h1>
+         length and percentage line-heights have poor inheritance behavior ...
+       </div>
 </body>
 </html>
